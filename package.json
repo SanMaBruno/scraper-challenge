@@ -1,0 +1,36 @@
+{
+  "name": "scraper-challenge",
+  "version": "1.0.0",
+  "description": "Scraper en TypeScript para el Registro de Resoluciones del Tribunal de Fiscalización Ambiental (OEFA) — sitio JSF/PrimeFaces, sin automatización de navegador.",
+  "main": "dist/main.js",
+  "author": "Bruno San Martín Navarro <brunorodolfosanmartinnavarro@gmail.com> (https://github.com/SanMaBruno)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SanMaBruno/scraper-challenge.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "scrape": "ts-node src/main.ts",
+    "scrape:sample": "ts-node src/main.ts --max-pages=2 --max-pdfs=3",
+    "scrape:retry-failed": "ts-node src/main.ts --retry-failed",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["scraper", "typescript", "jsf", "primefaces", "oefa"],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12"
+  }
+}

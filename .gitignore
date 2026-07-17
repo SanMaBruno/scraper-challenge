@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Datos extraídos y PDFs descargados (salida del scraper)
+data/
+
+# Logs y cobertura
+*.log
+coverage/
+
+# Sistema operativo / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Variables de entorno
+.env
