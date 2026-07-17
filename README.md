@@ -5,11 +5,12 @@ Recorre toda la paginación, extrae los metadatos de cada resolución y descarga
 los PDFs asociados.
 
 El enunciado del desafío apunta al portal del Poder Judicial
-(`jurisprudencia.pj.gob.pe`), que pide VPN a Perú. Lo desarrollé contra el sitio
-alternativo de OEFA, que es público y tiene la misma naturaleza: una app
-JSF/PrimeFaces sin API, con estado de sesión en el servidor. El diseño es el
-mismo para ambos casos; portarlo al del Poder Judicial es cuestión de cambiar
-la URL y los ids del formulario, no la arquitectura.
+(`jurisprudencia.pj.gob.pe`), que responde 403 fuera de Perú — lo comprobé
+antes de decidir. Por eso desarrollé contra el sitio alternativo de OEFA que
+el propio enunciado ofrece para trabajar sin VPN. Es el mismo tipo de
+aplicación: JSF/PrimeFaces sin API, con estado de sesión en el servidor.
+Portarlo al del Poder Judicial es cambiar la URL y los ids del formulario
+(están centralizados en un solo objeto en `OefaClient.ts`), no la arquitectura.
 
 Está resuelto sin automatización de navegador, como pide el desafío: solo
 peticiones HTTP con `axios` y parsing con `cheerio`.
@@ -174,6 +175,21 @@ prueban con un cliente HTTP falso que simula el 429 cuando yo quiero, no
 cuando el servidor decide dármelo.
 
 Corren también en GitHub Actions con cada push (Node 18 y 20).
+
+## Dónde está cada requisito del desafío
+
+Para no hacer buscar al que evalúa:
+
+| Requisito | Dónde |
+|---|---|
+| Navegación y paginación completa | `OefaScraper.run()` + `OefaClient.fetchPage()` |
+| Extracción de todos los campos | `OefaParser.parseRows()` |
+| Descarga de PDFs con nombre descriptivo | `PdfDownloader` + `buildPdfFileName()` |
+| Detección del 429 | `AxiosHttpClient.handle()` → `RateLimitError` |
+| Backoff exponencial | `shared/retry.ts` (`withRetry`, respeta `Retry-After`) |
+| Continuar si el error persiste | `PdfDownloader.download()` nunca lanza: registra y sigue |
+| Registro de fallidos para reintentar | `failed-downloads.jsonl` + modo `--retry-failed` |
+| Sin browser automation | solo `axios` y `cheerio`, no hay más dependencias |
 
 ## Qué le falta
 
